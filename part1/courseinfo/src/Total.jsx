@@ -1,4 +1,5 @@
-function Total({ parts }) {
+function Total({ course }) {
+  const parts = course.parts;
   return (
     <div>
       <p>

@@ -1,7 +1,8 @@
 import Part from "./Part";
 
-function Content({ parts }) {
-  console.log(parts[0].name, parts[0].exercises);
+function Content({ course }) {
+  const parts = course.parts;
+  console.log(parts);
   return (
     <div>
       <Part parts={parts[0]} />
