@@ -1,9 +1,9 @@
-function Total({ exercise }) {
+function Total({ part1, part2, part3 }) {
   return (
     <div>
       <p>
         Number of exercises{" "}
-        {exercise.exercises1 + exercise.exercises2 + exercise.exercises3}
+        {part1.exercises + part2.exercises + part3.exercises}
       </p>
     </div>
   );

@@ -1,12 +1,12 @@
 import Part from "./Part";
 
-function Content({ part, exercise }) {
-  console.log(part, exercise);
+function Content({ part1, part2, part3 }) {
+  console.log(part1, part2, part3);
   return (
     <div>
-      <Part part={part.part1} exercise={exercise.exercises1} />
-      <Part part={part.part2} exercise={exercise.exercises2} />
-      <Part part={part.part3} exercise={exercise.exercises3} />
+      <Part part={part1.name} exercise={part1.exercises} />
+      <Part part={part2.name} exercise={part2.exercises} />
+      <Part part={part3.name} exercise={part3.exercises} />
     </div>
   );
 }
