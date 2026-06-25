@@ -1,9 +1,9 @@
-function Part({ part, exercise }) {
-  //   console.log(exercise);
+function Part({ parts }) {
+  console.log(parts);
   return (
     <div>
       <p>
-        {part} {exercise}
+        {parts.name} {parts.exercises}
       </p>
     </div>
   );
