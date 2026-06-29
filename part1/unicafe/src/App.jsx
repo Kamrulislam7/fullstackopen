@@ -43,23 +43,26 @@ const App = () => {
 const Statistics = ({ good, bad, neutral, total }) => {
   return (
     <>
-      good{good} neutral{neutral} bad {bad}
-      <div>
-        <StatisticLine text="All" value={total} />
-        <StatisticLine text="Average" value={(good + -bad) / total} />
-        <StatisticLine text="positive" value={(good / total) * 100} />
-      </div>
+      <StatisticLine text="good" value={good} />
+      <StatisticLine text="neutral" value={neutral} />
+      <StatisticLine text="bad" value={bad} />
+      <StatisticLine text="All" value={total} />
+      <StatisticLine text="Average" value={(good + -bad) / total} />
+      <StatisticLine text="positive" value={(good / total) * 100} />
     </>
   );
 };
 
 const StatisticLine = ({ text, value }) => {
   return (
-    <>
-      <p>
-        {text}: {value}
-      </p>
-    </>
+    <table>
+      <tbody>
+        <tr>
+          <td>{text}:</td>
+          <td>{value}</td>
+        </tr>
+      </tbody>
+    </table>
   );
 };
 
