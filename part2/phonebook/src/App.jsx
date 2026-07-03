@@ -3,9 +3,12 @@ import { useState } from "react";
 const App = () => {
   const [persons, setPersons] = useState([{ name: "Arto Hellas", id: 1 }]);
   const [newName, setNewName] = useState("");
+  console.log(persons);
 
   const handelName = (e) => {
     console.log(e.target.value);
+    console.log(persons);
+
     setNewName(e.target.value);
   };
 
@@ -17,8 +20,14 @@ const App = () => {
       id: String(persons.length + 1),
     };
 
-    setPersons(persons.concat(newObjrect));
+    console.log(persons);
+
+    persons.find((data) => data.name === newName)
+      ? alert(`${newName} is already added to phonebook`)
+      : setPersons(persons.concat(newObjrect));
+
     setNewName("");
+    console.log(persons);
   };
   return (
     <div>
