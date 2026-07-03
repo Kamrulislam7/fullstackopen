@@ -3,6 +3,7 @@ import { useState } from "react";
 const App = () => {
   const [persons, setPersons] = useState([{ name: "Arto Hellas", id: 1 }]);
   const [newName, setNewName] = useState("");
+  const [newNumber, setNewNumber] = useState(0);
   console.log(persons);
 
   const handelName = (e) => {
@@ -12,10 +13,18 @@ const App = () => {
     setNewName(e.target.value);
   };
 
+  const handelNumber = (e) => {
+    console.log(e.target.value);
+    console.log(persons);
+
+    setNewNumber(e.target.value);
+  };
+
   const addPerson = (e) => {
     e.preventDefault();
     const newObjrect = {
       name: newName,
+      phone: newNumber,
       important: Math.random() < 0.5,
       id: String(persons.length + 1),
     };
@@ -27,6 +36,7 @@ const App = () => {
       : setPersons(persons.concat(newObjrect));
 
     setNewName("");
+    setNewNumber(0);
     console.log(persons);
   };
   return (
@@ -35,6 +45,10 @@ const App = () => {
       <form onSubmit={addPerson}>
         <div>
           name: <input value={newName} onChange={handelName} />
+        </div>
+        <div>
+          Numbers:{" "}
+          <input type="number" value={newNumber} onChange={handelNumber} />
         </div>
         <div>
           <button type="submit">add</button>
@@ -51,5 +65,9 @@ const App = () => {
 export default App;
 
 const Person = ({ person }) => {
-  return <h3>{person.name}</h3>;
+  return (
+    <h3>
+      {person.name} {person.phone}
+    </h3>
+  );
 };
