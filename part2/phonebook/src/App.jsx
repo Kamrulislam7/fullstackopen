@@ -11,6 +11,54 @@ const App = () => {
   const [newNumber, setNewNumber] = useState(0);
   const [filter, setFilter] = useState("");
 
+  const personsToShow = persons.filter((person) =>
+    person.name.toLowerCase().includes(filter.toLowerCase()),
+  );
+  return (
+    <div>
+      <h2>Phonebook</h2>
+      <h1>Phonebook</h1>
+      <Filter filter={filter} setFilter={setFilter} />
+
+      <Form
+        persons={persons}
+        newName={newName}
+        newNumber={newNumber}
+        setNewName={setNewName}
+        setNewNumber={setNewNumber}
+        setPersons={setPersons}
+      />
+      <h2>Numbers </h2>
+      {personsToShow.map((person) => (
+        <Person person={person} key={person.id} />
+      ))}
+    </div>
+  );
+};
+
+export default App;
+
+const Filter = ({ filter, setFilter }) => {
+  const searchHandle = (e) => {
+    setFilter(e.target.value);
+  };
+
+  return (
+    <div>
+      filter shown with{" "}
+      <input type="text" value={filter} onChange={searchHandle} />
+    </div>
+  );
+};
+
+const Form = ({
+  persons,
+  newName,
+  newNumber,
+  setNewName,
+  setNewNumber,
+  setPersons,
+}) => {
   const handelName = (e) => {
     setNewName(e.target.value);
   };
@@ -23,7 +71,7 @@ const App = () => {
     e.preventDefault();
     const newObjrect = {
       name: newName,
-      phone: newNumber,
+      number: newNumber,
       important: Math.random() < 0.5,
       id: String(persons.length + 1),
     };
@@ -36,53 +84,25 @@ const App = () => {
     setNewNumber(0);
   };
 
-  const searchHandle = (e) => {
-    setFilter(e.target.value);
-  };
-
-  const personsToShow = persons.filter((person) =>
-    person.name.toLowerCase().includes(filter.toLowerCase()),
-  );
   return (
-    <div>
-      <h2>Phonebook</h2>
-      <h1>Phonebook</h1>
+    <form onSubmit={addPerson}>
       <div>
-        filter shown with{" "}
-        <input type="text" value={filter} onChange={searchHandle} />
+        name: <input value={newName} onChange={handelName} />
       </div>
-      <form onSubmit={addPerson}>
-        <div>
-          name: <input value={newName} onChange={handelName} />
-        </div>
-        <div>
-          Numbers:{" "}
-          <input type="number" value={newNumber} onChange={handelNumber} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
-      <h2>Numbers </h2>
-      {personsToShow.map((person) => (
-        <Person person={person} key={person.id} />
-      ))}
-    </div>
-  );
-};
-
-export default App;
-const Later = ({ leter }) => {
-  return (
-    <h3>
-      {leter.name} {leter.phone}
-    </h3>
+      <div>
+        Numbers:{" "}
+        <input type="number" value={newNumber} onChange={handelNumber} />
+      </div>
+      <div>
+        <button type="submit">add</button>
+      </div>
+    </form>
   );
 };
 const Person = ({ person }) => {
   return (
     <h3>
-      {person.name} {person.phone}
+      {person.name} {person.number}
     </h3>
   );
 };
