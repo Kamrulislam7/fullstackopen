@@ -1,22 +1,21 @@
 import { useState } from "react";
 
 const App = () => {
-  const [persons, setPersons] = useState([{ name: "Arto Hellas", id: 1 }]);
+  const [persons, setPersons] = useState([
+    { name: "Arto Hellas", id: 1 },
+    { name: "Ada Lovelace", number: "39-44-5323523", id: 2 },
+    { name: "Dan Abramov", number: "12-43-234345", id: 3 },
+    { name: "Mary Poppendieck", number: "39-23-6423122", id: 4 },
+  ]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState(0);
-  console.log(persons);
+  const [filter, setFilter] = useState("");
 
   const handelName = (e) => {
-    console.log(e.target.value);
-    console.log(persons);
-
     setNewName(e.target.value);
   };
 
   const handelNumber = (e) => {
-    console.log(e.target.value);
-    console.log(persons);
-
     setNewNumber(e.target.value);
   };
 
@@ -29,19 +28,29 @@ const App = () => {
       id: String(persons.length + 1),
     };
 
-    console.log(persons);
-
     persons.find((data) => data.name === newName)
       ? alert(`${newName} is already added to phonebook`)
       : setPersons(persons.concat(newObjrect));
 
     setNewName("");
     setNewNumber(0);
-    console.log(persons);
   };
+
+  const searchHandle = (e) => {
+    setFilter(e.target.value);
+  };
+
+  const personsToShow = persons.filter((person) =>
+    person.name.toLowerCase().includes(filter.toLowerCase()),
+  );
   return (
     <div>
       <h2>Phonebook</h2>
+      <h1>Phonebook</h1>
+      <div>
+        filter shown with{" "}
+        <input type="text" value={filter} onChange={searchHandle} />
+      </div>
       <form onSubmit={addPerson}>
         <div>
           name: <input value={newName} onChange={handelName} />
@@ -55,7 +64,7 @@ const App = () => {
         </div>
       </form>
       <h2>Numbers </h2>
-      {persons.map((person) => (
+      {personsToShow.map((person) => (
         <Person person={person} key={person.id} />
       ))}
     </div>
@@ -63,7 +72,13 @@ const App = () => {
 };
 
 export default App;
-
+const Later = ({ leter }) => {
+  return (
+    <h3>
+      {leter.name} {leter.phone}
+    </h3>
+  );
+};
 const Person = ({ person }) => {
   return (
     <h3>
