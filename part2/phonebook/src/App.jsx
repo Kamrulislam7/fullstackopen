@@ -19,6 +19,16 @@ const App = () => {
   const personsToShow = persons.filter((person) =>
     person.name.toLowerCase().includes(filter.toLowerCase()),
   );
+
+  const deletePerson = (id, name) => {
+    const confirmDelete = window.confirm(`Delete ${name}?`);
+
+    if (confirmDelete) {
+      phoneBook.remove(id).then(() => {
+        setPersons(persons.filter((person) => person.id !== id));
+      });
+    }
+  };
   return (
     <div>
       <h2>Phonebook</h2>
@@ -35,7 +45,7 @@ const App = () => {
       />
       <h2>Numbers </h2>
       {personsToShow.map((person) => (
-        <Person person={person} key={person.id} />
+        <Person person={person} key={person.id} deletePerson={deletePerson} />
       ))}
     </div>
   );
@@ -107,10 +117,13 @@ const Form = ({
     </form>
   );
 };
-const Person = ({ person }) => {
+const Person = ({ person, deletePerson }) => {
   return (
     <h3>
       {person.name} {person.number}
+      <button onClick={() => deletePerson(person.id, person.name)}>
+        delete
+      </button>
     </h3>
   );
 };
