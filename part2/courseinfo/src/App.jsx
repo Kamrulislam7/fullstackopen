@@ -1,57 +1,42 @@
-import Course from "./Course";
+import { useEffect, useState } from "react";
+import Course, { Form } from "./Course";
+import noteService from "./services/notes.js";
 
 const App = () => {
-  const courses = [
-    {
-      name: "Half Stack application development",
-      id: 1,
-      parts: [
-        {
-          name: "Fundamentals of React",
-          exercises: 10,
-          id: 1,
-        },
-        {
-          name: "Using props to pass data",
-          exercises: 7,
-          id: 2,
-        },
-        {
-          name: "State of a component",
-          exercises: 14,
-          id: 3,
-        },
-        {
-          name: "Redux",
-          exercises: 11,
-          id: 4,
-        },
-      ],
-    },
-    {
-      name: "Node.js",
-      id: 2,
-      parts: [
-        {
-          name: "Routing",
-          exercises: 3,
-          id: 1,
-        },
-        {
-          name: "Middlewares",
-          exercises: 7,
-          id: 2,
-        },
-      ],
-    },
-  ];
+  const [notes, setNotes] = useState([]);
 
-  console.log(courses);
+  useEffect(() => {
+    noteService.getAll().then((response) => {
+      setNotes(response.data);
+    });
+  }, []);
+
+  const toggleImportanceOf = (id) => {
+    const note = notes.find((n) => n.id === id);
+    const changedNote = { ...note, important: !note.important };
+
+    noteService
+      .update(id, changedNote)
+      .then((returnedNote) => {
+        setNotes(notes.map((note) => (note.id === id ? returnedNote : note)));
+      })
+      .catch((e) => {
+        alert(
+          `the note '${(note.content, e)}' was already deleted from server`,
+        );
+        setNotes(notes.filter((n) => n.id !== id));
+      });
+  };
 
   return (
     <>
-      {courses.map((course) => (
-        <Course course={course} key={course.id} />
+      <Form notes={notes} setNotes={setNotes} />
+      {notes.map((course) => (
+        <Course
+          course={course}
+          key={course.id}
+          toggleImportance={() => toggleImportanceOf(course.id)}
+        />
       ))}
     </>
   );

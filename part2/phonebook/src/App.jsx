@@ -74,19 +74,22 @@ const Form = ({
 
   const addPerson = (e) => {
     e.preventDefault();
-    const newObjrect = {
+
+    if (persons.find((data) => data.name === newName))
+      alert(`${newName} is already added to phonebook`);
+
+    const newObject = {
       name: newName,
       number: newNumber,
       important: Math.random() < 0.5,
       id: String(persons.length + 1),
     };
 
-    persons.find((data) => data.name === newName)
-      ? alert(`${newName} is already added to phonebook`)
-      : setPersons(persons.concat(newObjrect));
-
-    setNewName("");
-    setNewNumber(0);
+    axios.post("http://localhost:3001/persons", newObject).then((response) => {
+      setPersons(persons.concat(response.data));
+      setNewName("");
+      setNewNumber("");
+    });
   };
 
   return (
