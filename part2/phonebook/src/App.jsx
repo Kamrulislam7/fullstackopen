@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+
+import phoneBook from "./services/persons.js";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -8,8 +9,7 @@ const App = () => {
   const [filter, setFilter] = useState("");
 
   useEffect(() => {
-    console.log("effect");
-    axios.get("http://localhost:3001/persons").then((response) => {
+    phoneBook.getAll().then((response) => {
       console.log("promise fulfilled");
       setPersons(response.data);
     });
@@ -85,7 +85,7 @@ const Form = ({
       id: String(persons.length + 1),
     };
 
-    axios.post("http://localhost:3001/persons", newObject).then((response) => {
+    phoneBook.create(newObject).then((response) => {
       setPersons(persons.concat(response.data));
       setNewName("");
       setNewNumber("");

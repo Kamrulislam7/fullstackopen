@@ -49,6 +49,12 @@
       "number": "044",
       "important": true,
       "id": "BUojZBSLTHs"
+    },
+    {
+      "name": "ddd",
+      "number": "0666",
+      "important": true,
+      "id": "_ytcfuQy-OU"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
