@@ -25,6 +25,24 @@
       "number": "018888888",
       "important": false,
       "id": "LTYiU6I70ak"
+    },
+    {
+      "name": "arto hellas",
+      "number": "01490303",
+      "important": true,
+      "id": "HylJ7YjN3Kw"
+    },
+    {
+      "name": "Arto Hellas ",
+      "number": "11111",
+      "important": false,
+      "id": "yBGkF2-a10w"
+    },
+    {
+      "name": "kamrul",
+      "number": "01",
+      "important": false,
+      "id": "a7YssAaaBHE"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

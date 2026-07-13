@@ -17,7 +17,7 @@ const App = () => {
   console.log("render", persons.length, "notes");
 
   const personsToShow = persons.filter((person) =>
-    person.name.toLowerCase().includes(filter.toLowerCase()),
+    person.name?.toLowerCase().includes(filter?.toLowerCase()),
   );
 
   const deletePerson = (id, name) => {
@@ -82,21 +82,66 @@ const Form = ({
     setNewNumber(e.target.value);
   };
 
-  const addPerson = (e) => {
-    e.preventDefault();
+  // const addPerson = (e) => {
+  //   e.preventDefault();
 
-    if (persons.find((data) => data.name === newName))
-      alert(`${newName} is already added to phonebook`);
+  //   if (persons.find((data) => data.name === newName)) {
+  //     alert(`${newName} is already added to phonebook`);
+  //     return;
+  //   }
+  //   const newObject = {
+  //     name: newName,
+  //     number: newNumber,
+  //     important: Math.random() < 0.5,
+  //     id: String(persons.length + 1),
+  //   };
 
-    const newObject = {
+  //   phoneBook.create(newObject).then((response) => {
+  //     setPersons(persons.concat(response.data));
+  //     setNewName("");
+  //     setNewNumber("");
+  //   });
+  // };
+  const addPerson = (event) => {
+    event.preventDefault();
+
+    const existingPerson = persons.find((person) => person.name === newName);
+
+    if (existingPerson) {
+      const ok = window.confirm(
+        `${newName} is already added to phonebook, replace the old number with a new one?`,
+      );
+
+      if (ok) {
+        const changedPerson = {
+          ...existingPerson,
+          number: newNumber,
+        };
+
+        phoneBook
+          .update(existingPerson.id, changedPerson)
+          .then((returnedPerson) => {
+            setPersons(
+              persons.map((person) =>
+                person.id !== existingPerson.id ? person : returnedPerson,
+              ),
+            );
+
+            setNewName("");
+            setNewNumber("");
+          });
+      }
+
+      return;
+    }
+
+    const newPerson = {
       name: newName,
       number: newNumber,
-      important: Math.random() < 0.5,
-      id: String(persons.length + 1),
     };
 
-    phoneBook.create(newObject).then((response) => {
-      setPersons(persons.concat(response.data));
+    phoneBook.create(newPerson).then((returnedPerson) => {
+      setPersons(persons.concat(returnedPerson));
       setNewName("");
       setNewNumber("");
     });
