@@ -7,32 +7,51 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState(0);
   const [filter, setFilter] = useState("");
+  const [notification, setNotification] = useState({
+    message: null,
+    type: "success",
+  });
 
   useEffect(() => {
+    const nonExistiong = { name: "noneplu", id: 5, pnone: 1231 };
     phoneBook.getAll().then((response) => {
       console.log("promise fulfilled");
-      setPersons(response.data);
+      setPersons(response.data.concat(nonExistiong));
     });
   }, []);
-  console.log("render", persons.length, "notes");
 
   const personsToShow = persons.filter((person) =>
     person.name?.toLowerCase().includes(filter?.toLowerCase()),
   );
 
   const deletePerson = (id, name) => {
-    const confirmDelete = window.confirm(`Delete ${name}?`);
+    if (window.confirm(`Delete ${name}?`)) {
+      phoneBook
+        .remove(id)
+        .then(() => {
+          setPersons(persons.filter((person) => person.id !== id));
+        })
+        .catch(() => {
+          setNotification({
+            message: `Information of ${name} has already been removed from server`,
+            type: "error",
+          });
 
-    if (confirmDelete) {
-      phoneBook.remove(id).then(() => {
-        setPersons(persons.filter((person) => person.id !== id));
-      });
+          setTimeout(() => {
+            setNotification({
+              message: null,
+              type: "error",
+            });
+          }, 5000);
+
+          setPersons(persons.filter((person) => person.id !== id));
+        });
     }
   };
   return (
     <div>
-      <h2>Phonebook</h2>
       <h1>Phonebook</h1>
+      <Notification notification={notification} />
       <Filter filter={filter} setFilter={setFilter} />
 
       <Form
@@ -42,6 +61,7 @@ const App = () => {
         setNewName={setNewName}
         setNewNumber={setNewNumber}
         setPersons={setPersons}
+        setNotification={setNotification}
       />
       <h2>Numbers </h2>
       {personsToShow.map((person) => (
@@ -73,6 +93,7 @@ const Form = ({
   setNewName,
   setNewNumber,
   setPersons,
+  setNotification,
 }) => {
   const handelName = (e) => {
     setNewName(e.target.value);
@@ -118,6 +139,25 @@ const Form = ({
           number: newNumber,
         };
 
+        // phoneBook
+        //   .update(existingPerson.id, changedPerson)
+        //   .then((returnedPerson) => {
+        //     setPersons(
+        //       persons.map((person) =>
+        //         person.id !== existingPerson.id ? person : returnedPerson,
+        //       ),
+        //     );
+
+        //     setMessage(`Updated ${changedPerson.name}`);
+
+        //     setTimeout(() => {
+        //       setMessage(null);
+        //     }, 5000);
+
+        //     setNewName("");
+        //     setNewNumber("");
+        //   });
+
         phoneBook
           .update(existingPerson.id, changedPerson)
           .then((returnedPerson) => {
@@ -127,8 +167,34 @@ const Form = ({
               ),
             );
 
-            setNewName("");
-            setNewNumber("");
+            setNotification({
+              message: `Updated ${returnedPerson.name}`,
+              type: "success",
+            });
+
+            setTimeout(() => {
+              setNotification({
+                message: null,
+                type: "success",
+              });
+            }, 5000);
+          })
+          .catch(() => {
+            setNotification({
+              message: `Information of ${existingPerson.name} has already been removed from server`,
+              type: "error",
+            });
+
+            setTimeout(() => {
+              setNotification({
+                message: null,
+                type: "error",
+              });
+            }, 5000);
+
+            setPersons(
+              persons.filter((person) => person.id !== existingPerson.id),
+            );
           });
       }
 
@@ -142,6 +208,18 @@ const Form = ({
 
     phoneBook.create(newPerson).then((returnedPerson) => {
       setPersons(persons.concat(returnedPerson));
+
+      setNotification({
+        message: `Added ${newPerson.name}`,
+        type: "success",
+      });
+
+      setTimeout(() => {
+        setNotification({
+          message: null,
+          type: "success",
+        });
+      }, 5000);
       setNewName("");
       setNewNumber("");
     });
@@ -171,4 +249,12 @@ const Person = ({ person, deletePerson }) => {
       </button>
     </h3>
   );
+};
+
+const Notification = ({ notification }) => {
+  if (notification.message === null) {
+    return null;
+  }
+
+  return <div className={notification.type}>{notification.message}</div>;
 };

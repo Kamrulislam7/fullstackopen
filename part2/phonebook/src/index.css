@@ -1,0 +1,23 @@
+h1 {
+  color: aqua;
+}
+
+.success {
+  color: green;
+  background: lightgray;
+  border: 2px solid green;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  font-size: 18px;
+}
+
+.error {
+  color: red;
+  background: lightgray;
+  border: 2px solid red;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  font-size: 18px;
+}
