@@ -86,6 +86,20 @@ const Message = () => {
 
 const Contrydetails = ({ filterCountry }) => {
   console.log(filterCountry);
+
+  const [weather, setWeather] = useState();
+
+  const apiKey = import.meta.env.VITE_WEATHER_API_KEY;
+
+  // https://api.openweathermap.org/data/2.5/weather?q=London&units=metric&appid=
+  useEffect(() => {
+    fetch(
+      `https://api.openweathermap.org/data/2.5/weather?q=${filterCountry[0]?.capital?.[0]}&appid=${apiKey}&units=metric`,
+    )
+      .then((res) => res.json())
+      .then((data) => setWeather(data));
+  }, []);
+
   return (
     <div>
       <h2>{filterCountry[0]?.name?.common}</h2>
@@ -101,6 +115,7 @@ const Contrydetails = ({ filterCountry }) => {
         src={filterCountry[0]?.flags.png}
         alt={filterCountry[0]?.flags.alt}
       />
+      <Weather weather={weather} />
     </div>
   );
 };
@@ -114,5 +129,21 @@ const Languages = ({ country }) => {
         </ul>
       ))}
     </>
+  );
+};
+
+const Weather = ({ weather }) => {
+  console.log(weather);
+  return (
+    <div>
+      <h1>Weather in{weather?.name}</h1>
+      <p>Temperature {weather?.main.temp}</p>
+      <img
+        src={` https://openweathermap.org/payload/api/media/file/${weather?.weather[0].icon}.png`}
+        alt=""
+        width={100}
+      />
+      <p>Wind {weather?.wind.speed}</p>
+    </div>
   );
 };
